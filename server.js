@@ -2,11 +2,11 @@ var log = require('logger')(module);
 var db = require('db');
 db.connect();
 
-var user = require('user');
+var User = require('user');
 
 function run () {
-	var petya = new user("Петя");
-	var vasya = new user("Вася");
+	var petya = new User("Петя");
+	var vasya = new User("Вася");
 	
 	vasya.hello(petya);
 
@@ -14,18 +14,23 @@ function run () {
 }
 
 
-
-/* var http = require('http');
-var server = new http.Server();
-
-server.listen(1337, '127.0.0.1');
-
-server.on('request', function(req, res) {
-	res.end("Привет мир!");
-}); */
-
 if (module.parent) {
 	exports.run = run;
 } else {
 	run();
 }
+
+
+// Запуск сервера
+var http = require('http');
+var url = require('url');
+var server = new http.Server(function(req, res) {
+	console.log('Метод: ' + req.method, '\n' + 'Url: ' + req.url);
+
+	var urlParsed = url.parse(req.url, true);
+	console.log(urlParsed);
+
+	if (urlParsed.pathname = '/echo' && )
+});
+
+server.listen(1337, '127.0.0.1');

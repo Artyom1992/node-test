@@ -1,7 +1,7 @@
 var phrases;
 
 exports.connect = function () {
-	phrases = require('db/ru');
+	phrases = require('db/ru.json');
 }
 
 exports.getPhrase = function (name) {
