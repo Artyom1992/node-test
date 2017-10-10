@@ -2,7 +2,6 @@
 
 var gulp = require('gulp'), 
 	rename = require('gulp-rename'), 
-	gutil = require('gulp-util'), 
 	livereload = require('gulp-livereload'), 
 	changed = require('gulp-changed'), 
 	cache = require('gulp-cache'), 
@@ -181,4 +180,4 @@ gulp.task('watch', function() {
 	gulp.watch(srcPath.css + '/**/*.css', gulp.series('css')); // Отслеживание файлов .css
 	gulp.watch(srcPath.js + '/**/*.js', gulp.series('js')); // Отслеживание файлов .js
 });
-gulp.task('default', gulp.parallel('assets', 'css', 'js', 'watch'));
+gulp.task('default', gulp.parallel('css', 'js', 'watch'));
