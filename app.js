@@ -113,3 +113,7 @@ server.emit('request', {from: "Клиент"});
 server.emit('request', {from: "Ещё Клиент"});
 
 console.log(util.inspect(server.listeners('request')));
+
+/*------------- SUPERVISOR (процесс разработки) позволяет перезапустить node автоматически-------------*/ 
+
+/*------------- МОДУЛЬ NODE-INSPECTOR позволяет отлаживать (нужно устанавливать) -------------*/

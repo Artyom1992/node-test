@@ -6,7 +6,7 @@ function User(name) {
 }
 
 User.prototype.hello = function (who) {
-	log(db.getPhrase('Hello') + ", " + who.name);
+	log.info(db.getPhrase('Hello') + ", " + who.name);
 } 
 
 module.exports = User;

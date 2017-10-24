@@ -1,7 +1,44 @@
+/*------------- МОДУЛЬ WINSTON позволяет записывать логи -------------*/
 var log = require('logger')(module);
+//  log2.debug() - сообщение маленькой важности
+//  log2.info() - сообщение средней важности
+//  log2.error() - сообщение об ошибке (все ошибки очень важные)
+// Логгер выводит ошибки уровня info и error по умолчанию
+
+// NODE_DEBUG - переменная окружения, которая используется внутри самого node.js, если в модуле используется данная переменная, они могут показыват, что происходит внутри них
+
+//Подключение базы данных 
 var db = require('db');
 db.connect();
 
+
+var util = require('util');
+
+// Запуск сервера
+var http = require('http');
+var url = require('url');
+
+/* МОДУЛЬ FS(файловая система) */
+var fs = require('fs');
+
+
+http.createServer(function(req, res) {
+	var info;
+	
+	if (req.url == '/') {
+		info = fs.readFile('index.html', function (err, info) {
+			if (err) {
+				console.error(err);
+				res.statusCode = 500;
+				res.end('На сервере произошла ошибка')ж
+				return;
+			}
+			res.end(info);
+		});
+	}
+}).listen(3000);
+
+// Подключаемые модули
 var User = require('user');
 
 function run () {
@@ -10,21 +47,14 @@ function run () {
 	
 	vasya.hello(petya);
 
-	log(db.getPhrase("Run is successfuled"));
+	log.info(db.getPhrase("Run is successfuled"));
 }
-
 
 if (module.parent) {
 	exports.run = run;
 } else {
 	run();
 }
-
-
-var util = require('util');
-// Запуск сервера
-var http = require('http2');
-var url = require('url');
 
 /* var server = new http.Server(); // Сервер является EventEmmiter
 server.listen(1337, '127.0.0.1');
@@ -37,22 +67,23 @@ server.on('request', function(req, res) {
 	res.end("Привет, мир!" + ++counter);
 }); */
 
- var server = new http.Server(function(req, res) {
-	console.log(util.format("%s: %j", "Ответы(то, что присылает) бразуера", req.headers));
-
-/* 	res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'}); */
+/*  var server = new http.Server(function(req, res) {
+	log.info(util.format("%s: %j", "Ответы(то, что присылает) бразуера", req.headers));
 
 	console.log('Метод: ' + req.method, '\n' + 'Url: ' + req.url);
 	var urlParsed = url.parse(req.url, true);
 	console.log(urlParsed);
 
-	if (urlParsed.pathname = '/' && urlParsed.query.message) {
+	if (req.method == 'GET' && urlParsed.pathname == '/' && urlParsed.query.message) {
+		var message = urlParsed.query.message
 		res.setHeader('Cache-control', 'no-cache');
-		res.end(urlParsed.query.message);
+		log.debug(message);
+		res.end(message);
 	} else {
+		log.error("Unknown URL");
 		res.statusCode = 404;
 		res.end("Page not found");
 	}
 });
 
-server.listen(1337, '127.0.0.1');
+server.listen(1337, '127.0.0.1'); */
