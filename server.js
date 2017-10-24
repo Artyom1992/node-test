@@ -4,8 +4,8 @@ var log = require('logger')(module);
 //  log2.info() - сообщение средней важности
 //  log2.error() - сообщение об ошибке (все ошибки очень важные)
 // Логгер выводит ошибки уровня info и error по умолчанию
-
 // NODE_DEBUG - переменная окружения, которая используется внутри самого node.js, если в модуле используется данная переменная, они могут показыват, что происходит внутри них
+
 
 //Подключение базы данных 
 var db = require('db');
@@ -21,7 +21,33 @@ var url = require('url');
 /* МОДУЛЬ FS(файловая система) */
 var fs = require('fs');
 
+/* Синхронный вызов */
+// Блокирует => используется там, где нет параллелизма
+// Работает try...catch
+// Прост и понятен
+http.createServer(function(req, res) {
+	var info;
+	
+	if (req.url == '/') {
 
+		try {
+			info = fs.readFileSync('index.html');
+		} catch(err) {
+			console.error(err);
+			res.statusCode = 500;
+			res.end('На сервере произошла ошибка');
+			return;
+		}
+		res.end(info);
+	} else {
+		/* 404 */
+	}
+}).listen(3000);
+
+/* Асинхронный вызов */
+// Не Блокирует
+// Не Работает try->catch(работает, но есть err в callback) => callback(err), очень важно обрабатывать ошибки, хоть как-нибуть
+// Сложнее(есть способы упростить себе жизнь)
 http.createServer(function(req, res) {
 	var info;
 	
@@ -30,13 +56,16 @@ http.createServer(function(req, res) {
 			if (err) {
 				console.error(err);
 				res.statusCode = 500;
-				res.end('На сервере произошла ошибка')ж
+				res.end('На сервере произошла ошибка');
 				return;
 			}
 			res.end(info);
 		});
+	} else {
+		/* 404 */
 	}
 }).listen(3000);
+
 
 // Подключаемые модули
 var User = require('user');
