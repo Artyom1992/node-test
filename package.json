@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "express": "~4.16.1",
+    "mime": "~2.0.3",
     "winston": "~2.4.0"
   }
 }
