@@ -7,7 +7,7 @@ var path = require('path');
 var ROOT = __dirname + '/public/';
 
 http.createServer(function (req, res) {
-
+	console.log('Имя урла ' + url.parse(req.url).pathname);
 	if (!checkAccess(req)) {
 		res.statusCode = 403;
 		res.end("Tell me the secret to access!");
@@ -37,15 +37,18 @@ function sendFileSafe(filePath, res) {
 	}
 
 	filePath = path.normalize(path.join(ROOT, filePath));
-
-	if (filePath.indexOf(ROOT) != 0) {
+	console.log('Второе Имя урла ' + filePath);
+	console.log('Второе Имя урла2 ' + ROOT);
+	
+	if (~filePath.indexOf(ROOT)) {
+		console.log('есть совпадение!');
 		res.statusCode = 404;
 		res.end("File not found");
 		return;
 	}
 
-	ds.stat(filePath, function(err, stats){
-		if (err || stats.isFile()) {
+	fs.stat(filePath, function(err, stats){
+		if (err || !stats.isFile()) {
 			res.statusCode = 404;
 			res.end("File not found");
 			return;
@@ -56,11 +59,13 @@ function sendFileSafe(filePath, res) {
 }
 
 function sendFile(filePath, res) {
+
 	fs.readFile(filePath, function(err, content) {
 		if (err) throw err;
 
-		var mime = require('mime').lookup(filePath); // проверяет расширение
-		res.setHeader('Content-type', mime + "; charset=utg-8");
+		var mime = require('mime').lookup('text/html');
+		console.log(mime.lookup('text/html')); // проверяет расширение
+		res.setHeader('Content-type', mime + "; charset=utf-8");
 		res.end(content);
 	});
 }
